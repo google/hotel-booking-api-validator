@@ -1,0 +1,18 @@
+{
+  "api_version": 1,
+  "transaction_id": "641e10d1-0b50-4872-b05a-26630a69b42c",
+  "tracking": {
+    "campaign_id": "20190401",
+    "pos_url": "https://example.com/book?track=gb2019CA&track2=bookongoogle"
+  },
+  "hotel_id": "123",
+  "start_date": "2019-04-03",
+  "end_date": "2019-04-05",
+  "party": {
+    "adults": 2
+   },
+  "language": "en",
+  "currency": "USD",
+  "user_country": "US",
+  "device_type": "DESKTOP"
+}

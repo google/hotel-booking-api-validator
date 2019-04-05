@@ -1,0 +1,747 @@
+// API v1 (April 4, 2019) interface declaration for Book on Google API
+syntax = "proto3";
+
+package ext.travel.booking.partner.v1;
+
+// +------+------------------------------+----------------------------------+
+// | Verb |          HTTP Path           |      Request/Response Body       |
+// +------+------------------------------+----------------------------------+
+// | POST | /BookingAvailability         | BookingAvailabilityRequest       |
+// |      |                              | BookingAvailabilityResponse      |
+// +------+------------------------------+----------------------------------+
+// | POST | /BookingSubmit               | BookingSubmitRequest             |
+// |      |                              | BookingSubmitResponse            |
+// +------+------------------------------+----------------------------------+
+
+// BookingAvailability method
+
+// Request to check availability for the given search criteria.
+message BookingAvailabilityRequest {
+  // The version number of the api spec used. (required)
+  int32 api_version = 1;
+
+  // Unique ID for the request. (required)
+  string transaction_id = 2;
+
+  // Tracking parameters. (optional)
+  Tracking tracking = 3;
+
+  // Partner hotel ID. (required)
+  string hotel_id = 4;
+
+  // Check-in date (format YYYY-MM-DD). (required)
+  string start_date = 5;
+
+  // Check-out date (format YYYY-MM-DD). (required)
+  string end_date = 6;
+
+  // Number of adult guests and children by age in years for a single room.
+  // (required)
+  Occupancy party = 7;
+
+  // The BCP-47 language tag identifying the language expected in the response.
+  // (required)
+  string language = 8;
+
+  // ISO 4217 currency code for the currency expected in the response.
+  // (required)
+  string currency = 9;
+
+  // The ISO 3166 country code identified by the originating user request.
+  // (optional)
+  string user_country = 10;
+
+  enum DeviceType {
+    UNKNOWN_DEVICE_TYPE = 0;
+    DESKTOP = 1;
+    MOBILE = 2;
+    TABLET = 3;
+  }
+  // DeviceType used to issue the request. (optional)
+  DeviceType device_type = 11;
+}
+
+// Response with hotel availability for the given search criteria.
+message BookingAvailabilityResponse {
+  // The version of the api spec used, ex 1. (required)
+  int32 api_version = 1;
+
+  // Echo unique ID for the request. (required)
+  string transaction_id = 2;
+
+  // Echo partner hotel ID. (required)
+  string hotel_id = 3;
+
+  // Echo check-in date (format YYYY-MM-DD). (required)
+  string start_date = 4;
+
+  // Echo check-out date (format YYYY-MM-DD). (required)
+  string end_date = 5;
+
+  // Echo number of adult guests and children by age in years. (required)
+  Occupancy party = 6;
+
+  // The list of room types that match the search criteria. (required)
+  repeated RoomType room_types = 7;
+
+  // The list of rate plans that match the search criteria. (required)
+  repeated RatePlan rate_plans = 8;
+
+  // The list of room rates that match the search criteria; (required)
+  repeated RoomRate room_rates = 9;
+
+  // The hotel details. (required, unless error)
+  HotelDetails hotel_details = 10;
+
+  // Partner policy details. (optional)
+  PartnerPolicies policies = 11;
+
+  // Error details if the request was not successful. (optional)
+  AvailabilityError error = 12;
+}
+
+// BookingSubmit method
+
+// Request to book a reservation for given criteria.
+message BookingSubmitRequest {
+  // The version number of the api spec used. (required)
+  int32 api_version = 1;
+
+  // Unique ID for the request. (required)
+  string transaction_id = 2;
+
+  // Tracking parameters. (optional)
+  Tracking tracking = 3;
+
+  // Partner hotel ID. (required)
+  string hotel_id = 4;
+
+  // Check-in date (format YYYY-MM-DD). (required)
+  string start_date = 5;
+
+  // Check-out date (format YYYY-MM-DD). (required)
+  string end_date = 6;
+
+  // Booking customer's ip addrss. (required)
+  string ip_address = 7;
+
+  // Customer details. (required)
+  Customer customer = 8;
+
+  // Primary traveler details along with party details. (required)
+  Traveler traveler = 9;
+
+  // Room rate details. (required)
+  RoomRate room_rate = 10;
+
+  message Payment {
+    // Selected guarantee type. (required)
+    GuaranteeType type = 1;
+
+    message PaymentCardParameters {
+      // Type of credit card. (required)
+      CardType card_type = 1;
+
+      // Credit card number. (required)
+      string card_number = 2;
+
+      // Name of card holder. (required)
+      string cardholder_name = 3;
+
+      // 2-digit month (format MM). (required)
+      string expiration_month = 4;
+
+      // 4-digit year (format YYYY)
+      string expiration_year = 5;
+
+      // Card verification code. (required if cvc_required in the CardOption is
+      // true)
+      string cvc = 6;
+    }
+    // Detailed credit card information. (required)
+    PaymentCardParameters payment_card_parameters = 2;
+
+    // Billing address associated with the credit card. (required)
+    Address billing_address = 3;
+  }
+
+  // Payment details. (required)
+  Payment payment = 11;
+}
+
+// Response confirming the booking reservation or rejection details.
+message BookingSubmitResponse {
+  // The version number of the api spec used. (required)
+  int32 api_version = 1;
+
+  // Unique ID for the request. (required)
+  string transaction_id = 2;
+
+  enum Status {
+    SUCCESS = 0;
+    FAILURE = 1;
+  }
+  // Success or failure status of the booking request. (reqiured)
+  Status status = 3;
+
+  message Reservation {
+    message Locator {
+      // Unique identifier for the reservation. (required)
+      string id = 1;
+
+      // Password needed to access the reservation. (optional)
+      string pin = 2;
+    }
+    // Locator in the partner's reservation system. (required unless error)
+    Locator locator = 1;
+
+    // Locator in the hotel's reservation system, with either one element for
+    // the reservation or one element for each room. (optional)
+    repeated Locator hotel_locators = 2;
+
+    // Partner hotel ID. (required)
+    string hotel_id = 4;
+
+    // Check-in date (format YYYY-MM-DD). (required)
+    string start_date = 5;
+
+    // Check-out date (format YYYY-MM-DD). (required)
+    string end_date = 6;
+
+    // Customer details. (required)
+    Customer customer = 8;
+
+    // Primary traveler details along with party details. (required)
+    Traveler traveler = 9;
+
+    // Room rate details. (required)
+    RoomRate room_rate = 10;
+  }
+  // Reservation details. (required)
+  Reservation reservation = 4;
+
+  // Error details. (optional)
+  SubmitError error = 5;
+}
+
+// Other message specifications
+
+// Availability response error details.
+message AvailabilityError {
+  enum AvailabilityErrorType {
+    // Error type is unknown.
+    UNKNOWN_ERROR = 0;
+
+    // API version specified in the request is not supported by the server.
+    API_VERSION_UNSUPPORTED = 1;
+
+    // Specified dates are invalid or in the past.
+    DATE_SELECTION_INVALID = 2;
+
+    // A hotel with the specified ID could not be found.
+    HOTEL_NOT_FOUND = 3;
+
+    // Network error while communicating with a third-party system.
+    NETWORK_ERROR = 4;
+
+    // Service is temporarily unavailable.
+    RECOVERABLE_ERROR = 5;
+
+    // Request contains a field with data in an invalid format.
+    REQUEST_DATA_INVALID = 6;
+
+    // Request is missing a required field.
+    REQUEST_INCOMPLETE = 7;
+
+    // Request cannot be parsed other than a field containing data in an invalid
+    // format or missing a required field.
+    REQUEST_NOT_PARSABLE = 8;
+
+    // Error returned by a supplier system that does not fit into a recognized
+    // error type.
+    SUPPLIER_ERROR = 9;
+  }
+  // The type of availability error that was returned. (required)
+  AvailabilityErrorType type = 1;
+
+  // Detailed description of the error for debugging purposes. (required)
+  string message = 2;
+}
+
+// Address definition.
+message Address {
+  // Primary street address. (required)
+  string address1 = 1;
+
+  // Secondary street address, if needed. (optional)
+  string address2 = 2;
+
+  // Third portion of the street address, if necessary. (optional)
+  string address3 = 3;
+
+  // Name of the city. (required)
+  string city = 4;
+
+  // Name of  the state, region or province. (required)
+  string province = 5;
+
+  // Postal code. (required)
+  string postal_code = 6;
+
+  // The ISO 3166 country code identified by the originating user request.
+  // (optional)
+  string country = 7;
+}
+
+// Static list of typical room amenities.
+message BasicAmenities {
+  bool free_breakfast = 1;
+  bool free_wifi = 2;
+  bool free_parking = 3;
+}
+
+// Cancellation Policy details.
+message CancellationPolicy {
+  enum CancellationSummary {
+    // Cancellation policy is unknown.
+    UNKNOWN_CANCELLATION_POLICY = 0;
+
+    // There is a period of time during which the reservation can be canceled
+    // without penalty.
+    FREE_CANCELLATION = 1;
+
+    // There is no period of time during which the reservation can be canceled
+    // with a penalty less than the total amount paid.
+    NON_REFUNDABLE = 2;
+
+    // There is no period of time during which the reservation can be canceled
+    // without penalty, but there is a period of time during which it can be
+    // canceled with a penalty less than the total amount paid.
+    PARTIAL_REFUND = 3;
+  }
+  // Designated cancellation policy. (required)
+  CancellationSummary summary = 1;
+
+  // If summary is FREE_CANCELLATION, the date and time after which it is no
+  // longer possible to cancel the reservation without penalty, or if summary is
+  // PARTIAL_REFUND, the date and time after which it is no longer possible to
+  // cancel the reservation with a penalty less than the total amount paid (ISO
+  // 8601 format YYYY-MM-DDThh:mm:ss+/-hh:mm).
+  // (required if summary is FREE_CANCELLATION)
+  string cancellation_deadline = 2;
+
+  // Display additional policy information associated with this cancellation
+  // policy. (required unless rules is fully specified in each RoomRate using
+  // this RatePlan)
+  DisplayString unstructured_policy = 3;
+}
+
+// Number of adult and children occupants.
+message Capacity {
+  // Maximum occupants that the room is capable of accommodating. (required)
+  int32 adults = 1;
+
+  // Number of children allowed in the room. (optional)
+  int32 children = 2;
+}
+
+// Customer details.
+message Customer {
+  // Given name. (required)
+  string first_name = 1;
+
+  // Surname. (required)
+  string last_name = 2;
+
+  // Domestic format for given country. (required)
+  string phone_number = 3;
+
+  // Customer email address. (required)
+  string email = 4;
+
+  // The ISO 3166 country code identified by the originating user request.
+  // (required)
+  string country = 5;
+}
+
+// Text for display along with it's specified language code (if available).
+message DisplayString {
+  // The text to be displayed. (required)
+  string text = 1;
+
+  // The BCP-47 language tag identifying the language expected in the response.
+  // (required, unless language is not known)
+  string language = 2;
+}
+
+// Hotel property metadata details.
+message HotelDetails {
+  // Name of the hotel property. (required)
+  string name = 1;
+
+  // Address of the hotel property. (required)
+  Address address = 2;
+
+  // Represents a latitude and longitude coordinate location.
+  message Geolocation {
+    double latitude = 1;
+    double longitude = 2;
+  }
+  // Geolocation of the hotel property. (optional)
+  Geolocation geolocation = 3;
+
+  // The phone number customers can use to reach the hotel. (required)
+  string phone_number = 4;
+
+  // Hotel policy details.
+  message HotelPolicies {
+    // Check-in time in the hotel's local time zone including the time zone if
+    // possible (ISO 8601 format hh:mm or hh:mm+/-hh:mm). (optional)
+    string check_in_time = 1;
+
+    // Check-out time in the hotel's local time zone including the time zone if
+    // possible (ISO 8601 format hh:mm or hh:mm+/-hh:mm). (optional)
+    string check_out_time = 2;
+
+    // Maximum age for a guest to be considered a child. (optional)
+    int32 max_child_age = 3;
+  }
+  // Hotel policies. (optional)
+  HotelPolicies policies = 5;
+
+  // Hotel property photos. (optional)
+  repeated Photo photos = 6;
+}
+
+// Number of adult guests and children by age in years in a party.
+message Occupancy {
+  // If only a total person occupancy is known, consider all to be adults.
+  // (required)
+  int32 adults = 1;
+
+  // One element per child occupant with value equal to the child's age in
+  // years. (optional)
+  repeated int32 children = 2;
+}
+
+// Partner policy details.
+message PartnerPolicies {
+  message CardOption {
+    // Specify the card type. (required)
+    CardType card_type = 1;
+
+    // Whether or not the CVC number is required. (required)
+    bool cvc_required = 2;
+  }
+  // Credit card option details. (required)
+  repeated CardOption card_options = 1;
+
+  // Display additional policy information associated with this partner policy.
+  // (optional)
+  DisplayString unstructured_policies = 2;
+}
+
+// Photo definition.
+message Photo {
+  // The url of the photo. (required)
+  string url = 1;
+
+  // Description of the photo, sometimes used at the alt text for display.
+  // (optional)
+  DisplayString description = 2;
+}
+
+// Price details.
+message Price {
+  // Price in float, ex. 123.45 (required)
+  float amount = 1;
+
+  // The currency of the price that is defined in ISO 4217. (required)
+  string currency = 2;
+}
+
+// Rate plan details.
+message RatePlan {
+  // Identifier for the rate plan. (required)
+  string code = 1;
+
+  // Partner provided rate plan name. (required)
+  DisplayString name = 2;
+
+  // The description displayed for this rate plan. (optional)
+  DisplayString description = 3;
+
+  // Indicates basic amenities available for this rate plan. (optional)
+  BasicAmenities basic_amenities = 4;
+
+  // Optional type of guarantee required to guarantee reservation. (required)
+  GuaranteeType guarantee_type = 5;
+
+  // The designated cancellation policy for this rate plan.  (required)
+  CancellationPolicy cancellation_policy = 6;
+
+  // Display additional policy information associated with this rate plan.
+  // (optional)
+  repeated DisplayString unstructured_policies = 7;
+}
+
+// Room rate details.
+message RoomRate {
+  // Identifier for the room type, should correspond to RoomID in the
+  // RoomBundle. (required)
+  // https://developers.google.com/hotels/hotel-ads/xml-reference/transaction-messages#RoomBundle
+  string code = 1;
+
+  // Identifier for the associated room type. (required)
+  string room_type_code = 2;
+
+  // Identifier for the associated rate plan. (required)
+  string rate_plan_code = 3;
+
+  // Maximum occupancy allowed for this room rate. (required)
+  Capacity maximum_allowed_occupancy = 4;
+
+  // Total price at booking, should equal the sum of line_items for which
+  // paid_at_checkout is false. (required)
+  Price total_price_at_booking = 5;
+
+  // Total price at checkout, should equal the sum of line_items for which
+  // paid_at_checkout is true. (required)
+  Price total_price_at_checkout = 6;
+
+  message LineItem {
+    // Price should be for the reservation and for the stay, unless stay_date
+    // is specified, in which case it should be for the particular night of the
+    // stay. (required)
+    Price price = 1;
+
+    enum LineItemType {
+      // Base room rate.
+      BASE_RATE = 0;
+      // Taxes and/or fees that cannot be separated or are of an unknown type.
+      UNKNOWN_TAXES_AND_FEES = 1;
+      // Taxes that cannot be separated or of an unknown type.
+      UNKNOWN_TAXES = 2;
+      // Tax applied by a city or municipality, such as a sales or tourism tax.
+      TAX_MUNICIPAL = 3;
+      // VAT or GST.
+      TAX_VAT = 4;
+      // Tax that does not fall into another defined type.
+      TAX_OTHER = 5;
+      // Fees that cannot be separated or of an unknown type.
+      UNKNOWN_FEES = 6;
+      // Fee applied by the advertiser or booking partner.
+      FEE_BOOKING = 7;
+      // Fee applied by the hotel that does not fall into another defined type.
+      FEE_HOTEL = 8;
+      // Fee applied by the hotel for resort-type accommodations or other
+      // amenities.
+      FEE_RESORT = 9;
+      // Fee applied by the hotel for transportation, such as transfers or
+      // connections.
+      FEE_TRANSFER = 10;
+      // Fee that does not fall into another defined type.
+      FEE_OTHER = 11;
+    }
+    // The type of this line item. (reqired)
+    LineItemType type = 2;
+
+    // True if price is paid at checkout, false if the price is paid at booking.
+    // (required)
+    bool paid_at_checkout = 3;
+
+    // Line item descripion. (optional)
+    DisplayString description = 4;
+  }
+  // List of line item details. Will not be populated in BookingSubmitRequest.
+  // (required for availability response only)
+  repeated LineItem line_items = 7;
+
+  // Rules for applying penalties if certain cancellation deadlines are missed.
+  message CancellationRule {
+    // Date and time after which the cancellation rule takes effect, or empty
+    // if the rule is in effect from the time of booking (ISO 8601 format
+    // YYYY-MM-DDThh:mm:ss+/-hh:mm), or "NO_SHOW" for a no show fee charged if
+    // the user neither cancels nor shows up for the reservation. (required
+    // unless rule is in effect from the time of booking)
+    string deadline = 1;
+
+    // Fee charged if the reservation is canceled after the deadline, or if the
+    // deadline is "NO_SHOW", the fee charged if user does not show up.
+    // (required)
+    Price penalty = 2;
+  }
+  // Preferred over CancellationPolicy/unstructured_policy when available. Will
+  // not be populated in BookingSubmitRequest. (optional)
+  repeated CancellationRule cancellation_rules = 8;
+
+  // Display additional policy information associated with this room rate. Will
+  // not be populated in BookingSubmitRequest. (optional)
+  DisplayString unstructured_policy = 9;
+
+  // Arbitrary data to be echoed back in the booking submission. (optional)
+  repeated string partner_data = 10;
+
+  // Number of rooms available for this RoomRate. Will not be populated in
+  // BookingSubmitRequest. (optional)
+  int32 room_count = 11;
+}
+
+// Room type details.
+message RoomType {
+  // Identifier for the room type, should correspond to RoomID in the
+  // RoomBundle. (required)
+  // https://developers.google.com/hotels/hotel-ads/xml-reference/transaction-messages#RoomBundle
+  string code = 1;
+
+  // The name of the room type.
+  DisplayString name = 2;
+
+  // The description displayed for this room type. (optional)
+  DisplayString description = 3;
+
+  // Basic amenities for the associated room type. (optional)
+  BasicAmenities basic_amenities = 4;
+
+  // Room photos. (optional)
+  repeated Photo photos = 5;
+
+  // Maximum occupants that the room is capable of accommodating. (required)
+  Capacity capacity = 6;
+
+  message BedTypes {
+    int32 total_beds = 1;
+    int32 king_beds = 2;
+    int32 queen_beds = 3;
+    int32 double_beds = 4;
+    int32 single_or_twin_beds = 5;
+    int32 murphy_beds = 6;
+    int32 sofa_beds = 7;
+    int32 bunk_beds = 8;
+    int32 other_beds = 9;
+  }
+  // Count of each bed type available in the room. (optional)
+  BedTypes bed_types = 7;
+
+  // Display additional policy information associated with this room type.
+  // (required unless rules is fully specified)
+  DisplayString unstructured_policy = 8;
+}
+
+// Booking submit error details.
+message SubmitError {
+  enum SubmitErrorType {
+    // error type is unknown.
+    UNKNOWN_ERROR = 0;
+    // API version specified in the request is not supported by the server.
+    API_VERSION_UNSUPPORTED = 1;
+    // the partner or hotel cannot support this booking as it is too close to
+    // the check-in date or time.
+    CHECKIN_TOO_CLOSE = 2;
+    // the customer name is invalid.
+    CUSTOMER_NAME_INVALID = 3;
+    // specified dates are invalid or in the past.
+    DATE_SELECTION_INVALID = 4;
+    // the booking appears to be a duplicate of an existing reservation.
+    DUPLICATE_BOOKING = 5;
+    // a hotel with the specified ID could not be found.
+    HOTEL_NOT_FOUND = 6;
+    // network error while communicating with a third-party system.
+    NETWORK_ERROR = 7;
+    // billing address invalid or missing information.
+    PAYMENT_BILLING_ADDRESS_INVALID = 8;
+    // payment card cardholder name is invalid.
+    PAYMENT_CARD_CARDHOLDER_NAME_INVALID = 9;
+    // payment card CVC is missing or invalid.
+    PAYMENT_CARD_CVC_INVALID = 10;
+    // payment card expiration date is invalid or has expired.
+    PAYMENT_CARD_EXPIRATION_INVALID = 11;
+    // payment card number is not valid for the card type.
+    PAYMENT_CARD_NUMBER_INVALID = 12;
+    // payment card type is unrecognized or not supported for this reservation.
+    PAYMENT_CARD_TYPE_NOT_SUPPORTED = 13;
+    // payment declined by the processor or by partner risk assessment.
+    PAYMENT_DECLINED = 14;
+    // error processing the payment that does not fit into a recognized error
+    // type.
+    PAYMENT_INVALID = 15;
+    // payment does not have sufficient funds or credit to cover the
+    // transaction.
+    PAYMENT_INSUFFICIENT = 16;
+    // error returned by a payment processor that does not fit into a recognized
+    // error type.
+    PAYMENT_PROCESSOR_ERROR = 17;
+    // payment type is unrecognized or not accepted for this reservation.
+    PAYMENT_TYPE_NOT_ACCEPTED = 18;
+    // rate plan code is unrecognized or not available.
+    RATE_PLAN_UNAVAILABLE = 19;
+    // service is temporarily unavailable.
+    RECOVERABLE_ERROR = 20;
+    // request contains a field with data in an invalid format.
+    REQUEST_DATA_INVALID = 21;
+    // request is missing a required field.
+    REQUEST_INCOMPLETE = 22;
+    // request cannot be parsed other than a field containing data in an invalid
+    // format or missing a required field.
+    REQUEST_NOT_PARSABLE = 23;
+    // room rate details are invalid or out of date other than pricing.
+    ROOM_RATE_MISMATCH = 24;
+    // room rate pricing details are out of date.
+    ROOM_RATE_PRICE_MISMATCH = 25;
+    // room rate code is unrecognized or not available.
+    ROOM_RATE_UNAVAILABLE = 26;
+    // room type code is unrecognized or not available.
+    ROOM_TYPE_UNAVAILABLE = 27;
+    // the traveler name is invalid.
+    TRAVELER_NAME_INVALID = 28;
+    // error returned by a supplier system that does not fit into a recognized
+    // error type.
+    SUPPLIER_ERROR = 29;
+  }
+  SubmitErrorType type = 1;
+
+  // Detailed message for debugging the error. (required)
+  string message = 2;
+}
+
+// Partner provided tracking parameters.
+message Tracking {
+  // Optional advertising campaign identifier. (optional)
+  string campaign_id = 1;
+
+  // Point of Sale (POS) URL, a deep link to the partner's website that may
+  // contain tracking parameters. (optional)
+  string pos_url = 2;
+}
+
+// Traveler details.
+message Traveler {
+  // Given name. (required)
+  string first_name = 1;
+
+  // Surname. (required)
+  string last_name = 2;
+
+  // Count of travlers in party. (required)
+  Occupancy occupancy = 3;
+}
+
+// Enum definitions
+
+// List of credit card types,
+enum CardType {
+  AX = 0;  // American Express
+  DC = 1;  // Diners Club
+  DS = 2;  // Discover
+  JC = 3;  // JCB
+  MC = 4;  // Mastercard
+  VI = 5;  // Visa
+}
+
+// List of available forms of guaranteeing a reservation.
+enum GuaranteeType {
+  // Payment information is not required at the time of booking.
+  NO_GUARANTEE = 0;
+  // The user provides a credit or debit card when booking the reservation.
+  PAYMENT_CARD = 1;
+}

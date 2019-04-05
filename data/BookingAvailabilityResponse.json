@@ -1,0 +1,261 @@
+{
+  "api_version": 1,
+  "transaction_id": "641e10d1-0b50-4872-b05a-26630a69b42c",
+  "hotel_id": "123",
+  "start_date": "2019-04-03",
+  "end_date": "2019-04-05",
+  "party": {
+    "adults": 2
+  },
+  "room_types": [
+    {
+      "code": "MSTE",
+      "name": {
+        "text": "Master Suite",
+        "language": "en"
+      },
+      "description": {
+        "text": "The Master Suite of the Grand Budapest Hotel complete has spacious living area for you and your family",
+        "language": "en"
+      },
+      "basic_amenities": {
+        "free_breakfast": true,
+        "free_wifi": true,
+        "free_parking": true
+      },
+      "photos": [
+        {
+          "url": "https://example.com/photos/970cdb64-613e-413b-a664-4b249509c4bd.jpg",
+          "description": {
+            "text": "A sumptious hand-woven rug adorns the entry to the master suite",
+            "language": "en"
+          }
+        },
+        {
+          "url": "https://example.com/photos/aa94add5-bae2-41b0-9de7-6e19d408697b.jpg",
+          "description": {
+            "text": "The master suite features 3 bedrooms with ensuite bathrooms",
+            "language": "en"
+          }
+        }
+      ],
+      "capacity": {
+        "adults": 2,
+        "children": 3
+      }
+    },
+    {
+      "code": "DBLQ",
+      "name": {
+        "text": "Double Queen Beds",
+        "language": "en"
+      },
+      "description": {
+        "text": "Two queen-sized beds and a desk with a stylish reading lamp",
+        "language": "en"
+      },
+      "basic_amenities": {
+        "free_breakfast": true,
+        "free_wifi": true,
+        "free_parking": true
+      },
+      "photos": [
+        {
+          "url": "https://example.com/photos/c2d3a318-d43f-4c23-a003-e495d8167f7b.jpg",
+          "description": {
+            "text": "Two queen-sized beds with designer comforters",
+            "language": "en"
+          }
+        },
+        {
+          "url": "https://example.com/photos/8ffb38a7-0db6-4ad7-b2bf-8b08d102fab0.jpg",
+          "description": {
+            "text": "Personal reading lamp for guest use",
+            "language": "en"
+          }
+        }
+      ],
+      "capacity": {
+        "adults": 2,
+        "children": 2
+      }
+    }
+  ],
+  "rate_plans": [
+    {
+      "code": "BEST",
+      "name": {
+        "text": "Best Price Guarantee",
+        "language": "en"
+      },
+      "description": {
+        "text": "The best possible price for our rooms, or your money back",
+        "language": "en"
+      },
+      "guarantee_type": "PAYMENT_CARD",
+      "cancellation_policy": {
+        "summary": "FREE_CANCELLATION",
+        "cancellation_deadline": "2019-04-02T12:00:00+00:00"
+      }
+    }
+  ],
+  "room_rates": [
+    {
+      "code": "RATE1",
+      "room_type_code": "MSTE",
+      "rate_plan_code": "BEST",
+      "maximum_allowed_occupancy": {
+        "adults": 2
+      },
+      "total_price_at_checkout": {
+        "amount": 562,
+        "currency": "USD"
+      },
+      "line_items": [
+        {
+          "price": {
+            "amount": 50,
+            "currency": "USD"
+          },
+          "type": "UNKNOWN_TAXES_AND_FEES",
+          "paid_at_checkout": true,
+          "description": {
+            "text": "Standard foreign reservation fee",
+            "language": "en"
+          }
+        },
+        {
+          "price": {
+            "amount": 384,
+            "currency": "USD"
+          },
+          "type": "BASE_RATE",
+          "paid_at_checkout": true
+        },
+        {
+          "price": {
+            "amount": 128,
+            "currency": "USD"
+          },
+          "type": "TAX_VAT",
+          "paid_at_checkout": true
+        }
+      ],
+      "cancellation_rules": [
+        {
+          "deadline": "2019-04-02T12:00:00+00:00",
+          "penalty": {
+            "amount": 100,
+            "currency": "USD"
+          }
+        }
+      ]
+    },
+    {
+      "code": "RATE2",
+      "room_type_code": "DBLQ",
+      "rate_plan_code": "BEST",
+      "maximum_allowed_occupancy": {
+        "adults": 2
+      },
+      "total_price_at_checkout": {
+        "amount": 178,
+        "currency": "USD"
+      },
+      "line_items": [
+        {
+          "price": {
+            "amount": 50,
+            "currency": "USD"
+          },
+          "type": "UNKNOWN_TAXES_AND_FEES",
+          "paid_at_checkout": true,
+          "description": {
+            "text": "Standard foreign reservation fee",
+            "language": "en"
+          }
+        },
+        {
+          "price": {
+            "amount": 96,
+            "currency": "USD"
+          },
+          "type": "BASE_RATE",
+          "paid_at_checkout": true
+        },
+        {
+          "price": {
+            "amount": 32,
+            "currency": "USD"
+          },
+          "type": "TAX_VAT",
+          "paid_at_checkout": true
+        }
+      ],
+      "cancellation_rules": [
+        {
+          "deadline": "2019-04-02T12:00:00+00:00",
+          "penalty": {
+            "amount": 100,
+            "currency": "USD"
+          }
+        }
+      ]
+    }
+  ],
+  "hotel_details": {
+    "name": "The Grand Budapest Hotel",
+    "address": {
+      "address1": "78 Rue du Grand Hotel",
+      "city": "Zubrowka City",
+      "province": "Grand Zubrowka",
+      "postal_code": "ZK-2014",
+      "country": "US"
+    },
+    "geolocation": {
+      "latitude": 59.940715,
+      "longitude": 30.32543
+    },
+    "phone_number": "+1-(555)-1234-567",
+    "policies": {
+      "check_in_time": "14:00",
+      "check_out_time": "11:00"
+    },
+    "photos": [
+      {
+        "url": "https://example.com/photos/948c7584-cfc7-496d-890e-99fa637983fe.jpg",
+        "description": {
+          "text": "The entrance to the Grand Budapest Hotel",
+          "language": "en"
+        }
+      },
+      {
+        "url": "https://example.com/photos/b9576abf-b516-4e29-93cd-1ffb3531a1b0.jpg",
+        "description": {
+          "text": "Enjoy our pool and spa",
+          "language": "en"
+        }
+      }
+    ]
+  },
+  "policies": {
+    "card_options": [
+      {
+        "card_type": "AX",
+        "cvc_required": true
+      },
+      {
+        "card_type": "VI",
+        "cvc_required": true
+      },
+      {
+        "card_type": "MC",
+        "cvc_required": true
+      },
+      {
+        "card_type": "DS",
+        "cvc_required": true
+      }
+    ]
+  }
+}

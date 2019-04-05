@@ -1,0 +1,44 @@
+{
+  "api_version":1,
+  "transaction_id":"641e10d1-0b50-4872-b05a-26630a69b42c",
+  "status":"SUCCESS",
+  "reservation":{
+    "locator":{
+      "id":"googleapi-e7fafbb0a132fb519d0e1b82b23dc794"
+    },
+    "hotel_locators":[
+      {
+        "id":"GB123-02ae0db95944feac57e4ee56be661975"
+      }
+    ],
+    "hotel_id":"123",
+    "start_date":"2019-04-03",
+    "end_date":"2019-04-05",
+    "customer":{
+      "first_name":"John",
+      "last_name":"Doe",
+      "phone_number":"555-444-3333",
+      "email":"email@example.com",
+      "country":"US"
+    },
+    "traveler":{
+      "first_name":"John",
+      "last_name":"Doe",
+      "occupancy":{
+        "adults":2
+      }
+    },
+    "room_rate":{
+      "code":"RATE1",
+      "room_type_code":"MSTE",
+      "rate_plan_code":"BEST",
+      "maximum_allowed_occupancy": {
+        "adults": 2
+      },
+      "total_price_at_checkout":{
+        "amount":562,
+        "currency":"USD"
+      }
+    }
+  }
+}

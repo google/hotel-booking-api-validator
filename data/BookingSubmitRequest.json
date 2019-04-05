@@ -1,0 +1,55 @@
+{
+  "api_version":1,
+  "transaction_id":"641e10d1-0b50-4872-b05a-26630a69b42c",
+  "tracking":{
+    "campaign_id":"gb2019CA",
+    "pos_url":"https://example.com/book?track=gb2019CA&track2=bookongoogle"
+  },
+  "hotel_id":"123",
+  "start_date":"2019-04-03",
+  "end_date":"2019-04-05",
+  "ip_address":"123.234.345.456",
+  "customer":{
+    "first_name":"John",
+    "last_name":"Doe",
+    "phone_number":"555-444-3333",
+    "email":"email@example.com",
+    "country":"US"
+  },
+  "traveler":{
+    "first_name":"John",
+    "last_name":"Doe",
+    "occupancy":{
+      "adults":2
+    }
+  },
+  "room_rate":{
+    "code":"RATE1",
+    "room_type_code":"MSTE",
+    "rate_plan_code":"BEST",
+    "maximum_allowed_occupancy": {
+      "adults": 2
+    },
+    "total_price_at_checkout":{
+      "amount":562,
+      "currency":"USD"
+    }
+  },
+  "payment":{
+    "type":"PAYMENT_CARD",
+    "payment_card_parameters":{
+      "card_type":"VI",
+      "card_number":"4111111111111111",
+      "cardholder_name":"John Doe",
+      "expiration_month":"12",
+      "expiration_year":"21"
+    },
+    "billing_address":{
+      "address1":"123 Main St.",
+      "city":"Chicago",
+      "province":"IL",
+      "postal_code":"60607",
+      "country":"US"
+    }
+  }
+}
