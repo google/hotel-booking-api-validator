@@ -5,7 +5,8 @@
   "start_date": "2019-04-03",
   "end_date": "2019-04-05",
   "party": {
-    "adults": 2
+    "adults": 2,
+    "children": [7]
   },
   "room_types": [
     {
@@ -95,7 +96,7 @@
       "guarantee_type": "PAYMENT_CARD",
       "cancellation_policy": {
         "summary": "FREE_CANCELLATION",
-        "cancellation_deadline": "2019-04-02T12:00:00+00:00"
+        "cancellation_deadline": "2019-03-28T12:00:00+00:00"
       }
     }
   ],
@@ -143,7 +144,7 @@
       ],
       "cancellation_rules": [
         {
-          "deadline": "2019-04-02T12:00:00+00:00",
+          "deadline": "2019-03-28T12:00:00+00:00",
           "penalty": {
             "amount": 100,
             "currency": "USD"
@@ -194,7 +195,7 @@
       ],
       "cancellation_rules": [
         {
-          "deadline": "2019-04-02T12:00:00+00:00",
+          "deadline": "2019-03-28T12:00:00+00:00",
           "penalty": {
             "amount": 100,
             "currency": "USD"

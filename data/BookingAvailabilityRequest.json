@@ -9,8 +9,9 @@
   "start_date": "2019-04-03",
   "end_date": "2019-04-05",
   "party": {
-    "adults": 2
-   },
+    "adults": 2,
+    "children": [7]
+  },
   "language": "en",
   "currency": "USD",
   "user_country": "US",

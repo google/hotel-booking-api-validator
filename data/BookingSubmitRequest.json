@@ -9,6 +9,7 @@
   "start_date":"2019-04-03",
   "end_date":"2019-04-05",
   "ip_address":"123.234.345.456",
+  "language": "en",
   "customer":{
     "first_name":"John",
     "last_name":"Doe",
@@ -20,7 +21,8 @@
     "first_name":"John",
     "last_name":"Doe",
     "occupancy":{
-      "adults":2
+      "adults":2,
+      "children": [7]
     }
   },
   "room_rate":{

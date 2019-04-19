@@ -1,7 +1,10 @@
-// API v1 (April 4, 2019) interface declaration for Book on Google API
+// API v1 (April 12, 2019) interface declaration for Book on Google API
 syntax = "proto3";
 
 package ext.travel.booking.partner.v1;
+
+
+
 
 // +------+------------------------------+----------------------------------+
 // | Verb |          HTTP Path           |      Request/Response Body       |
@@ -125,14 +128,18 @@ message BookingSubmitRequest {
   // Booking customer's ip addrss. (required)
   string ip_address = 7;
 
+  // The BCP-47 language tag identifying the customer's preferred language
+  // (required)
+  string language = 8;
+
   // Customer details. (required)
-  Customer customer = 8;
+  Customer customer = 9;
 
   // Primary traveler details along with party details. (required)
-  Traveler traveler = 9;
+  Traveler traveler = 10;
 
   // Room rate details. (required)
-  RoomRate room_rate = 10;
+  RoomRate room_rate = 11;
 
   message Payment {
     // Selected guarantee type. (required)
@@ -166,7 +173,7 @@ message BookingSubmitRequest {
   }
 
   // Payment details. (required)
-  Payment payment = 11;
+  Payment payment = 12;
 }
 
 // Response confirming the booking reservation or rejection details.

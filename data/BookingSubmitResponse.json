@@ -25,7 +25,8 @@
       "first_name":"John",
       "last_name":"Doe",
       "occupancy":{
-        "adults":2
+        "adults":2,
+        "children": [7]
       }
     },
     "room_rate":{

@@ -3,11 +3,11 @@
 This repo contains the utility and code samples for validating an implementation
 of the Hotel Booking API spec.
 
-The Hotel Booking API Validator utility will send a request body you specify
-for any of the service endpoints and validate the response. The validator will
+The Hotel Booking API Validator utility will send a request body you specify for
+any of the service endpoints and validate the response. The validator will
 verify that the request and response bodies have valid schema according to the
 [v1 API proto file](./proto/v1.proto) and will also validate the response body
-correctly echos the criteria provided in the request body.
+correctly echoes the criteria provided in the request body.
 
 Note: This is not an officially supported Google product.
 
@@ -45,12 +45,7 @@ Remove any files from a previous installation
 Next, retrieve the utilities from the
 [hotel-booking-api-validator repository](https://github.com/google/hotel-booking-api-validator)
 
-    go get github.com/google/hotel-booking-api-validator
-
-Download all dependencies
-
-    cd $HOME/go
-    go get -d ./...
+    go get github.com/google/hotel-booking-api-validator/...
 
 To install the Hotel Booking API Validator, run
 
@@ -79,14 +74,10 @@ Remove any files from a previous installation
 Next, retrieve the utilities from the
 [hotel-booking-api-validator repository](https://github.com/google/hotel-booking-api-validator)
 
-    go get github.com/google/hotel-booking-api-validator
-
-Download all dependencies
-
     cd $env:HOME\go
     # NOTE: You may see output '...cannot find package...' when running the following 'go get' command.
     # These are likely just warnings and you can proceed with the installation.
-    go get -d .\...
+    go get github.com/google/hotel-booking-api-validator/...
 
 To install the Hotel Booking API Validator, run
 
@@ -143,6 +134,7 @@ bin/hotelBookingApiValidator \
 
 bin/hotelBookingApiValidator \
   --server_addr=external-dns:443 \
+  --ca_file=/path/to/external-dns.pem \
   --availability_request=$DATA_PATH/BookingAvailabilityRequest.json \
   --submit_request=$DATA_PATH/BookingSubmitRequest.json
 ```
