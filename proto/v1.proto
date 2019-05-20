@@ -418,6 +418,12 @@ message HotelDetails {
 
   // Hotel property photos. (optional)
   repeated Photo photos = 6;
+
+  // The email address customers can use to reach the hotel. (optional)
+  string email = 7;
+
+  // The url for the hotel's home page. (optional)
+  string homepage_url = 8;
 }
 
 // Number of adult guests and children by age in years in a party.
