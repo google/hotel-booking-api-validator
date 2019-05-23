@@ -1,4 +1,4 @@
-// API v1 (April 12, 2019) interface declaration for Book on Google API
+// API v1 (May 23, 2019) interface declaration for Book on Google API
 syntax = "proto3";
 
 package ext.travel.booking.partner.v1;
@@ -511,7 +511,9 @@ message RoomRate {
   // Identifier for the associated rate plan. (required)
   string rate_plan_code = 3;
 
-  // Maximum occupancy allowed for this room rate. (required)
+  // Maximum occupancy allowed for this room rate. If not specified, the room
+  // rate must accommodate the party in the BookingAvailabilityRequest.
+  // (optional)
   Capacity maximum_allowed_occupancy = 4;
 
   // Total price at booking, should equal the sum of line_items for which
@@ -619,7 +621,9 @@ message RoomType {
   // Room photos. (optional)
   repeated Photo photos = 5;
 
-  // Maximum occupants that the room is capable of accommodating. (required)
+  // Maximum occupants that the room is capable of accommodating. If not
+  // specified, the room type must accommodate the party in the
+  // BookingAvailabilityRequest. (optional)
   Capacity capacity = 6;
 
   message BedTypes {

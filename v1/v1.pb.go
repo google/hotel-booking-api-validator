@@ -2271,7 +2271,9 @@ type RoomRate struct {
 	RoomTypeCode string `protobuf:"bytes,2,opt,name=room_type_code,json=roomTypeCode,proto3" json:"room_type_code,omitempty"`
 	// Identifier for the associated rate plan. (required)
 	RatePlanCode string `protobuf:"bytes,3,opt,name=rate_plan_code,json=ratePlanCode,proto3" json:"rate_plan_code,omitempty"`
-	// Maximum occupancy allowed for this room rate. (required)
+	// Maximum occupancy allowed for this room rate. If not specified, the room
+	// rate must accommodate the party in the BookingAvailabilityRequest.
+	// (optional)
 	MaximumAllowedOccupancy *Capacity `protobuf:"bytes,4,opt,name=maximum_allowed_occupancy,json=maximumAllowedOccupancy,proto3" json:"maximum_allowed_occupancy,omitempty"`
 	// Total price at booking, should equal the sum of line_items for which
 	// paid_at_checkout is false. (required)
@@ -2540,7 +2542,9 @@ type RoomType struct {
 	BasicAmenities *BasicAmenities `protobuf:"bytes,4,opt,name=basic_amenities,json=basicAmenities,proto3" json:"basic_amenities,omitempty"`
 	// Room photos. (optional)
 	Photos []*Photo `protobuf:"bytes,5,rep,name=photos,proto3" json:"photos,omitempty"`
-	// Maximum occupants that the room is capable of accommodating. (required)
+	// Maximum occupants that the room is capable of accommodating. If not
+	// specified, the room type must accommodate the party in the
+	// BookingAvailabilityRequest. (optional)
 	Capacity *Capacity `protobuf:"bytes,6,opt,name=capacity,proto3" json:"capacity,omitempty"`
 	// Count of each bed type available in the room. (optional)
 	BedTypes *RoomType_BedTypes `protobuf:"bytes,7,opt,name=bed_types,json=bedTypes,proto3" json:"bed_types,omitempty"`
