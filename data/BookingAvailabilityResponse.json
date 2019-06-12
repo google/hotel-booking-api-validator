@@ -1,6 +1,6 @@
 {
   "api_version": 1,
-  "transaction_id": "641e10d1-0b50-4872-b05a-26630a69b42c",
+  "transaction_id": "84dd3b20-a556-4b3a-bc77-d5449c0a58cd",
   "hotel_id": "123",
   "start_date": "2019-04-03",
   "end_date": "2019-04-05",
@@ -150,6 +150,10 @@
             "currency": "USD"
           }
         }
+      ],
+      "partner_data":[
+        "ARB_0403",
+        "SFO-BOS-RDU"
       ]
     },
     {
@@ -201,6 +205,10 @@
             "currency": "USD"
           }
         }
+      ],
+      "partner_data":[
+        "ARB_0403",
+        "SFO-BOS-RDU"
       ]
     }
   ],
@@ -217,6 +225,8 @@
       "latitude": 59.940715,
       "longitude": 30.32543
     },
+    "email": "test@example.com",
+    "homepage_url": "https://example.com/hotel_homepage",
     "phone_number": "+1-(555)-1234-567",
     "policies": {
       "check_in_time": "14:00",

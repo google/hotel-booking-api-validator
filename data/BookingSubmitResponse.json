@@ -1,6 +1,6 @@
 {
   "api_version":1,
-  "transaction_id":"641e10d1-0b50-4872-b05a-26630a69b42c",
+  "transaction_id":"84dd3b20-a556-4b3a-bc77-d5449c0a58cd",
   "status":"SUCCESS",
   "reservation":{
     "locator":{
@@ -17,7 +17,7 @@
     "customer":{
       "first_name":"John",
       "last_name":"Doe",
-      "phone_number":"555-444-3333",
+      "phone_number":"+1-555-4443333",
       "email":"email@example.com",
       "country":"US"
     },
@@ -39,7 +39,11 @@
       "total_price_at_checkout":{
         "amount":562,
         "currency":"USD"
-      }
+      },
+      "partner_data":[
+        "ARB_0403",
+        "SFO-BOS-RDU"
+      ]
     }
   }
 }

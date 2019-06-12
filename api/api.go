@@ -33,6 +33,7 @@ import (
 	"github.com/golang/protobuf/jsonpb"
 
 	"github.com/google/hotel-booking-api-validator/utils"
+
 	pb "github.com/google/hotel-booking-api-validator/v1"
 )
 
@@ -71,8 +72,9 @@ func setupCertConfig(caFile, fullServerName string) (*tls.Config, error) {
 		return nil, errors.New("failed to parse root certificates, please check your roots file (ca_file flag) and try again")
 	}
 	return &tls.Config{
-		RootCAs:    cp,
-		ServerName: fullServerName,
+		RootCAs:            cp,
+		ServerName:         fullServerName,
+		InsecureSkipVerify: true,
 	}, nil
 }
 

@@ -1,19 +1,19 @@
 {
   "api_version":1,
-  "transaction_id":"641e10d1-0b50-4872-b05a-26630a69b42c",
+  "transaction_id":"84dd3b20-a556-4b3a-bc77-d5449c0a58cd",
   "tracking":{
-    "campaign_id":"gb2019CA",
+    "campaign_id":"20190401",
     "pos_url":"https://example.com/book?track=gb2019CA&track2=bookongoogle"
   },
   "hotel_id":"123",
   "start_date":"2019-04-03",
   "end_date":"2019-04-05",
-  "ip_address":"123.234.345.456",
+  "ip_address":"1.2.3.4",
   "language": "en",
   "customer":{
     "first_name":"John",
     "last_name":"Doe",
-    "phone_number":"555-444-3333",
+    "phone_number":"+1-555-4443333",
     "email":"email@example.com",
     "country":"US"
   },
@@ -35,22 +35,27 @@
     "total_price_at_checkout":{
       "amount":562,
       "currency":"USD"
-    }
+    },
+    "partner_data":[
+      "ARB_0403",
+      "SFO-BOS-RDU"
+    ]
   },
   "payment":{
     "type":"PAYMENT_CARD",
     "payment_card_parameters":{
       "card_type":"VI",
-      "card_number":"4111111111111111",
+      "card_number":"---PAN---",
       "cardholder_name":"John Doe",
-      "expiration_month":"12",
-      "expiration_year":"21"
+      "expiration_month":"10",
+      "expiration_year":"2016",
+      "cvc":"---CVN---"
     },
     "billing_address":{
-      "address1":"123 Main St.",
-      "city":"Chicago",
-      "province":"IL",
-      "postal_code":"60607",
+      "address1":"10 Main St.",
+      "city":"Cambridge",
+      "province":"MA",
+      "postal_code":"01234",
       "country":"US"
     }
   }
