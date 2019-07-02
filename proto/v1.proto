@@ -412,6 +412,10 @@ message HotelDetails {
 
     // Maximum age for a guest to be considered a child. (optional)
     int32 max_child_age = 3;
+
+    // Display additional policy information associated with this rate plan.
+    // (optional)
+    repeated DisplayString unstructured_policies = 4;
   }
   // Hotel policies. (optional)
   HotelPolicies policies = 5;
@@ -451,7 +455,7 @@ message PartnerPolicies {
 
   // Display additional policy information associated with this partner policy.
   // (optional)
-  DisplayString unstructured_policies = 2;
+  repeated DisplayString unstructured_policies = 2;
 }
 
 // Photo definition.
@@ -642,7 +646,7 @@ message RoomType {
 
   // Display additional policy information associated with this room type.
   // (required unless rules is fully specified)
-  DisplayString unstructured_policy = 8;
+  repeated DisplayString unstructured_policies = 8;
 }
 
 // Booking submit error details.

@@ -37,6 +37,9 @@ import (
 	pb "github.com/google/hotel-booking-api-validator/v1"
 )
 
+// TimeoutDuration represents the API response timeout duration in miliseconds.
+const TimeoutDuration = 30 * time.Second
+
 // HTTPConnection is a convenience struct for holding connection-related objects.
 type HTTPConnection struct {
 	client      *http.Client
@@ -95,7 +98,7 @@ func InitHTTPConnection(serverAddr, credentialsFile, caFile, fullServerName stri
 	}
 	return &HTTPConnection{
 		client: &http.Client{
-			Timeout:   10 * time.Second,
+			Timeout:   TimeoutDuration,
 			Transport: &http.Transport{TLSClientConfig: config},
 		},
 		credentials: credentials,
