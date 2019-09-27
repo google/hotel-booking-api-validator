@@ -292,7 +292,7 @@ message Address {
   // Name of  the state, region or province. (required)
   string province = 5;
 
-  // Postal code. (required)
+  // Postal code. (required except for within HotelDetails)
   string postal_code = 6;
 
   // The ISO 3166 country code identified by the originating user request.
@@ -761,8 +761,10 @@ enum CardType {
 
 // List of available forms of guaranteeing a reservation.
 enum GuaranteeType {
-  // Payment information is not required at the time of booking.
-  NO_GUARANTEE = 0;
+  // The GuaranteeType is unknown.
+  UNKNOWN_GUARANTEE_TYPE = 0;
   // The user provides a credit or debit card when booking the reservation.
   PAYMENT_CARD = 1;
+  // Payment information is not required at the time of booking.
+  NO_GUARANTEE = 2;
 }

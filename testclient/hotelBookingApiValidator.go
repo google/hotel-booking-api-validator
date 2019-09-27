@@ -22,6 +22,8 @@ import (
 
 	"github.com/google/hotel-booking-api-validator/api"
 	"github.com/google/hotel-booking-api-validator/utils"
+
+	pb "github.com/google/hotel-booking-api-validator/v1"
 )
 
 var (
@@ -87,12 +89,12 @@ func main() {
 	if *availabilityRequest != "" {
 		utils.LogFlow("Availability Check", "Start")
 		// Load search criteria request json/pb from disk
-		a, err := utils.LoadAvailabilityRequest(*availabilityRequest)
-		if err != nil {
-			log.Fatalf("Failed to get availability request: %v", err.Error())
+		pbReq := &pb.BookingAvailabilityRequest{}
+		if err := utils.LoadRequest(*availabilityRequest, pbReq); err != nil {
+			log.Fatalf("Failed to get availability request: %v", err)
 		}
 
-		if err = api.BookingAvailability(a, conn, *availabilityEndpoint); err != nil {
+		if err = api.BookingAvailability(pbReq, conn, *availabilityEndpoint); err != nil {
 			stats.BookingAvailabilitySuccess = false
 			log.Printf("Error making BookingAvailabilityRequest: %v", err)
 		} else {
@@ -104,12 +106,12 @@ func main() {
 	if *submitRequest != "" {
 		utils.LogFlow("Submit Check", "Start")
 		// Load search criteria request json/pb from disk
-		s, err := utils.LoadSubmitRequest(*submitRequest)
-		if err != nil {
-			log.Fatalf("Failed to get submit request: %v", err.Error())
+		pbReq := &pb.BookingSubmitRequest{}
+		if err := utils.LoadRequest(*submitRequest, pbReq); err != nil {
+			log.Fatalf("Failed to get submit request: %v", err)
 		}
 
-		if err = api.BookingSubmit(s, conn, *submitEndpoint); err != nil {
+		if err = api.BookingSubmit(pbReq, conn, *submitEndpoint); err != nil {
 			stats.BookingSubmitSuccess = false
 			log.Printf("Error making BookingSubmitRequest: %v", err)
 		} else {

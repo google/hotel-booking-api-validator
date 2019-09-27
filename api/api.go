@@ -40,45 +40,14 @@ import (
 // TimeoutDuration represents the API response timeout duration in miliseconds.
 const TimeoutDuration = 30 * time.Second
 
+var reader = ioutil.ReadFile
+
 // HTTPConnection is a convenience struct for holding connection-related objects.
 type HTTPConnection struct {
 	client      *http.Client
 	credentials string
 	marshaler   *jsonpb.Marshaler
 	baseURL     string
-}
-
-// setupCredentials will create a valid http basic auth header value if a valid credentials file is provided.
-func setupCredentials(credentialsFile string) (string, error) {
-	var credentials string
-	if credentialsFile != "" {
-		data, err := ioutil.ReadFile(credentialsFile)
-		if err != nil {
-			return "", err
-		}
-		credentials = "Basic " + base64.StdEncoding.EncodeToString([]byte(strings.ReplaceAll(string(data), "\n", "")))
-	}
-	return credentials, nil
-}
-
-// setupCertConfig attempts to construct a tls config if a valid ca file is provided.
-func setupCertConfig(caFile, fullServerName string) (*tls.Config, error) {
-	if caFile == "" {
-		return nil, nil
-	}
-	b, err := ioutil.ReadFile(caFile)
-	if err != nil {
-		return nil, fmt.Errorf("failed to read root certificates file: %v", err)
-	}
-	cp := x509.NewCertPool()
-	if !cp.AppendCertsFromPEM(b) {
-		return nil, errors.New("failed to parse root certificates, please check your roots file (ca_file flag) and try again")
-	}
-	return &tls.Config{
-		RootCAs:            cp,
-		ServerName:         fullServerName,
-		InsecureSkipVerify: true,
-	}, nil
 }
 
 // InitHTTPConnection creates and returns a new HTTPConnection object with a given server address and username/password.
@@ -112,6 +81,36 @@ func (h HTTPConnection) getURL(endpoint string) string {
 		return fmt.Sprintf("%v%v", h.baseURL, endpoint)
 	}
 	return h.baseURL
+}
+
+func setupCredentials(credentialsFile string) (string, error) {
+	var credentials string
+	if credentialsFile != "" {
+		data, err := reader(credentialsFile)
+		if err != nil {
+			return "", err
+		}
+		credentials = "Basic " + base64.StdEncoding.EncodeToString([]byte(strings.Replace(string(data), "\n", "", -1)))
+	}
+	return credentials, nil
+}
+
+func setupCertConfig(caFile, fullServerName string) (*tls.Config, error) {
+	if caFile == "" {
+		return nil, nil
+	}
+	b, err := reader(caFile)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read root certificates file: %v", err)
+	}
+	cp := x509.NewCertPool()
+	if !cp.AppendCertsFromPEM(b) {
+		return nil, errors.New("failed to parse root certificates, please check your roots file (ca_file flag) and try again")
+	}
+	return &tls.Config{
+		RootCAs:    cp,
+		ServerName: fullServerName,
+	}, nil
 }
 
 func logHTTPRequest(rpcName string, httpReq *http.Request) {

@@ -98,6 +98,22 @@
         "summary": "FREE_CANCELLATION",
         "cancellation_deadline": "2019-03-28T12:00:00+00:00"
       }
+    },
+    {
+      "code": "PAYMENTLESS",
+      "name": {
+        "text": "Pay When You Stay",
+        "language": "en"
+      },
+      "description": {
+        "text": "No payment guarantee required at booking",
+        "language": "en"
+      },
+      "guarantee_type": "NO_GUARANTEE",
+      "cancellation_policy": {
+        "summary": "FREE_CANCELLATION",
+        "cancellation_deadline": "2019-03-28T12:00:00+00:00"
+      }
     }
   ],
   "room_rates": [
@@ -191,6 +207,61 @@
         {
           "price": {
             "amount": 32,
+            "currency": "USD"
+          },
+          "type": "TAX_VAT",
+          "paid_at_checkout": true
+        }
+      ],
+      "cancellation_rules": [
+        {
+          "deadline": "2019-03-28T12:00:00+00:00",
+          "penalty": {
+            "amount": 100,
+            "currency": "USD"
+          }
+        }
+      ],
+      "partner_data":[
+        "ARB_0403",
+        "SFO-BOS-RDU"
+      ]
+    },
+    {
+      "code": "RATE3",
+      "room_type_code": "MSTE",
+      "rate_plan_code": "PAYMENTLESS",
+      "maximum_allowed_occupancy": {
+        "adults": 2
+      },
+      "total_price_at_checkout": {
+        "amount": 562,
+        "currency": "USD"
+      },
+      "line_items": [
+        {
+          "price": {
+            "amount": 50,
+            "currency": "USD"
+          },
+          "type": "UNKNOWN_TAXES_AND_FEES",
+          "paid_at_checkout": true,
+          "description": {
+            "text": "Standard foreign reservation fee",
+            "language": "en"
+          }
+        },
+        {
+          "price": {
+            "amount": 384,
+            "currency": "USD"
+          },
+          "type": "BASE_RATE",
+          "paid_at_checkout": true
+        },
+        {
+          "price": {
+            "amount": 128,
             "currency": "USD"
           },
           "type": "TAX_VAT",
