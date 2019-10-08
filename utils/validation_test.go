@@ -49,6 +49,21 @@ func TestValidateBookingSubmitResponseError(t *testing.T) {
 	}
 }
 
+func TestValidateBookingSubmitResponseMissing(t *testing.T) {
+	data, err := BookingSubmitData()
+	if err != nil {
+		t.Fatalf("error fetching BookingSubmitData: %q", err)
+	}
+	data.RespPb.ApiVersion = 0
+	data.RespPb.TransactionId = ""
+	data.RespPb.Reservation.Locator.Id = ""
+	want := fmt.Errorf("required field(s) missing: api_version, transaction_id, reservation > locator > id")
+	got := ValidateBookingSubmitResponse(data.ReqPb, data.RespPb)
+	if diff := cmp.Diff(got, want, equateErrorMessage); diff != "" {
+		t.Errorf("failed to catch missing required fields (diff -got +want): %s", diff)
+	}
+}
+
 func TestValidateBookingAvailabilityResponseMissing(t *testing.T) {
 	data, err := BookingAvailabilityData()
 	if err != nil {

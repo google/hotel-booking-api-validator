@@ -206,14 +206,29 @@ func ValidateBookingAvailabilityResponse(req *pb.BookingAvailabilityRequest, res
 	return nil
 }
 
-// ValidateBookingSubmitResponse ensures the booking submit criteria matches the echoed response.
+// ValidateBookingSubmitResponse checks for required fields, formats, and matching echo responses.
 func ValidateBookingSubmitResponse(req *pb.BookingSubmitRequest, resp *pb.BookingSubmitResponse) error {
-	return compareFields([]validationTest{
+	// Validate required fields are present and not set to the default value
+	if err := checkRequired([]requiredTest{
+		{"api_version", resp.GetApiVersion()},
+		{"transaction_id", resp.GetTransactionId()},
+		{"status", resp.GetStatus().String()},
+		{"reservation > locator > id", resp.GetReservation().GetLocator().GetId()},
+	}); err != nil {
+		return err
+	}
+
+	// Ensure echo response fields match request values
+	if err := compareFields([]validationTest{
 		{"hotel_id", req.GetHotelId(), resp.GetReservation().GetHotelId()},
 		{"start_date", req.GetStartDate(), resp.GetReservation().GetStartDate()},
 		{"end_date", req.GetEndDate(), resp.GetReservation().GetEndDate()},
 		{"customer", req.GetCustomer(), resp.GetReservation().GetCustomer()},
 		{"traveler", req.GetTraveler(), resp.GetReservation().GetTraveler()},
 		{"room_rate", req.GetRoomRate(), resp.GetReservation().GetRoomRate()},
-	})
+	}); err != nil {
+		return err
+	}
+
+	return nil
 }
