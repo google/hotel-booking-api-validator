@@ -23,8 +23,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/golang/protobuf/proto"
 	"github.com/google/go-cmp/cmp"
+	"github.com/golang/protobuf/proto"
 
 	pb "github.com/google/hotel-booking-api-validator/v1"
 )

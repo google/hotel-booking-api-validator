@@ -19,7 +19,8 @@
       "last_name":"Doe",
       "phone_number":"+1-555-4443333",
       "email":"email@example.com",
-      "country":"US"
+      "country":"US",
+      "loyalty_member_id": "abcdefg"
     },
     "traveler":{
       "first_name":"John",
