@@ -39,11 +39,7 @@
             "language": "en"
           }
         }
-      ],
-      "capacity": {
-        "adults": 2,
-        "children": 3
-      }
+      ]
     },
     {
       "code": "DBLQ",
@@ -179,14 +175,18 @@
       "maximum_allowed_occupancy": {
         "adults": 2
       },
+      "total_price_at_booking": {
+        "amount": 25,
+        "currency": "USD"
+      },
       "total_price_at_checkout": {
-        "amount": 178,
+        "amount": 537,
         "currency": "USD"
       },
       "line_items": [
         {
           "price": {
-            "amount": 50,
+            "amount": 25,
             "currency": "USD"
           },
           "type": "UNKNOWN_TAXES_AND_FEES",
@@ -198,7 +198,19 @@
         },
         {
           "price": {
-            "amount": 96,
+            "amount": 25,
+            "currency": "USD"
+          },
+          "type": "UNKNOWN_TAXES_AND_FEES",
+          "paid_at_checkout": false,
+          "description": {
+            "text": "Reservation Deposit",
+            "language": "en"
+          }
+        },
+        {
+          "price": {
+            "amount": 384,
             "currency": "USD"
           },
           "type": "BASE_RATE",
@@ -206,7 +218,7 @@
         },
         {
           "price": {
-            "amount": 32,
+            "amount": 128,
             "currency": "USD"
           },
           "type": "TAX_VAT",
@@ -272,7 +284,7 @@
         {
           "deadline": "2019-03-28T12:00:00+00:00",
           "penalty": {
-            "amount": 100,
+            "amount": 25,
             "currency": "USD"
           }
         }
@@ -296,9 +308,9 @@
       "latitude": 59.940715,
       "longitude": 30.32543
     },
+    "phone_number": "+1-(555)-1234-567",
     "email": "test@example.com",
     "homepage_url": "https://example.com/hotel_homepage",
-    "phone_number": "+1-(555)-1234-567",
     "policies": {
       "check_in_time": "14:00",
       "check_out_time": "11:00"

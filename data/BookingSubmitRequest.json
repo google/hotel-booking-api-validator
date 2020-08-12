@@ -15,7 +15,8 @@
     "last_name":"Doe",
     "phone_number":"+1-555-4443333",
     "email":"email@example.com",
-    "country":"US"
+    "country":"US",
+    "loyalty_member_id": "abcdefg"
   },
   "traveler":{
     "first_name":"John",
@@ -46,7 +47,7 @@
     "payment_card_parameters":{
       "card_type":"VI",
       "card_number":"---PAN---",
-      "cardholder_name":"John Doe",
+      "cardholder_name":"James Carter",
       "expiration_month":"10",
       "expiration_year":"2016",
       "cvc":"---CVN---"

@@ -4,6 +4,8 @@ syntax = "proto3";
 package ext.travel.booking.partner.v1;
 
 
+option go_package = ".;com_google_travel_booking_partners_googleapi_api";
+
 
 
 // +------+------------------------------+----------------------------------+
@@ -323,27 +325,50 @@ message CancellationPolicy {
     UNKNOWN_CANCELLATION_POLICY = 0;
 
     // There is a period of time during which the reservation can be canceled
-    // without penalty.
+    // without penalty and full refund of any deposit.
     FREE_CANCELLATION = 1;
 
     // There is no period of time during which the reservation can be canceled
-    // with a penalty less than the total amount paid.
+    // with a penalty less than the total amount paid, if there was a deposit,
+    // or less than the total amount of the reservation, if there was no
+    // deposit.
     NON_REFUNDABLE = 2;
 
     // There is no period of time during which the reservation can be canceled
     // without penalty, but there is a period of time during which it can be
-    // canceled with a penalty less than the total amount paid.
+    // canceled with a penalty less than the total amount paid, if there was a
+    // deposit, or less than the total amount of the reservation, if there was
+    // no deposit.
     PARTIAL_REFUND = 3;
   }
-  // Designated cancellation policy. (required)
+  // Summary of the cancellation policy. The value can be set with the
+  // assumption that the reservation is made in advance of the
+  // cancellation_deadline, and the policy displayed to the user will be
+  // adjusted as needed if the cancellation_deadline has already passed.
+  // (required)
   CancellationSummary summary = 1;
 
-  // If summary is FREE_CANCELLATION, the date and time after which it is no
-  // longer possible to cancel the reservation without penalty, or if summary is
-  // PARTIAL_REFUND, the date and time after which it is no longer possible to
-  // cancel the reservation with a penalty less than the total amount paid (ISO
-  // 8601 format YYYY-MM-DDThh:mm:ss+/-hh:mm).
-  // (required if summary is FREE_CANCELLATION)
+  // If the summary is FREE_CANCELLATION, this is the date and time after which
+  // it is no longer possible to cancel the reservation without a penalty. If a
+  // penalty is only charged in the case of a no show, this value should be set
+  // to "NO_SHOW". If there is never a penalty for cancellation or no show, this
+  // field should be set to an empty string.
+  //
+  // If the summary is PARTIAL_REFUND, this is the date and time after it is no
+  // longer possible to cancel the reservation without a penalty less than the
+  // total amount paid, if there was a deposit, or less than the total amount of
+  // the reservation, if there was not a deposit. If a penalty of at least the
+  // total amount paid, if there was a deposit, or at least the total amount of
+  // the reservation, if there was not a deposit, is only charged in the case of
+  // a no show, this value should be set to "NO_SHOW". If there is never a
+  // penalty for cancellation or no show of at least the total amount paid, if
+  // there was a deposit, or at least the total amount of the reservation, if
+  // there was not a deposit, this field should be set to an empty string.
+  //
+  // If the value is a date and time, this field is in ISO 8601 format
+  // YYYY-MM-DDThh:mm:ss+/-hh:mm.
+  //
+  // (required if summary is FREE_CANCELLATION or PARTIAL_REFUND)
   string cancellation_deadline = 2;
 
   // Display additional policy information associated with this cancellation
@@ -378,6 +403,12 @@ message Customer {
   // The ISO 3166 country code identified by the originating user request.
   // (required)
   string country = 5;
+
+  // The user wants to enroll in the partner's loyalty program.
+  bool join_loyalty_program = 6;
+
+  // Membership identifier in the partner's loyalty program.
+  string loyalty_member_id = 7;
 }
 
 // Text for display along with it's specified language code (if available).
@@ -509,6 +540,15 @@ message RatePlan {
   // Display additional policy information associated with this rate plan.
   // (optional)
   repeated DisplayString unstructured_policies = 7;
+
+  // Specifies conditions that must be satisfied to book a rate.
+  message RateRestriction {
+    // If the rate requires the user to provide a loyalty number or sign up for
+    // the loyalty program during the booking operation.
+    bool requires_loyalty_membership = 1;
+  }
+  // Conditions or restrictions for booking with this RoomRate.
+  repeated RateRestriction rate_restrictions = 8;
 }
 
 // Room rate details.
@@ -631,6 +671,16 @@ message RoomType {
   // Basic amenities for the associated room type. (optional)
   BasicAmenities basic_amenities = 4;
 
+  // List of amenities available in the room. If an amenity is not specified in
+  // the array, we assume it's unknown. (optional)
+  repeated RoomAmenityType room_amenities = 9;
+
+  // Room size in square meters. (optional)
+  float room_area_sq_meters = 10;
+
+  // Room size in square feet. (optional)
+  float room_area_sq_feet = 11;
+
   // Room photos. (optional)
   repeated Photo photos = 5;
 
@@ -727,6 +777,13 @@ message SubmitError {
     // error returned by a supplier system that does not fit into a recognized
     // error type.
     SUPPLIER_ERROR = 29;
+    // the loyalty identifier is invalid or required but missing.
+    LOYALTY_IDENTIFIER_INVALID = 30;
+    // the loyalty identifier is found but the accompanying information, e.g.,
+    // last name or email address, does not match records.
+    LOYALTY_IDENTIFIER_MISMATCH = 31;
+    // error occurred during loyalty sign-up.
+    LOYALTY_SIGNUP_FAILED = 32;
   }
   SubmitErrorType type = 1;
 
@@ -766,6 +823,56 @@ enum CardType {
   JC = 3;  // JCB
   MC = 4;  // Mastercard
   VI = 5;  // Visa
+}
+
+// List of room amenity types
+enum RoomAmenityType {
+  UNKNOWN_ROOM_AMENITY_TYPE = 0;
+  PRIVATE_BATHROOM = 1;
+  TOILET = 2;
+  BIDET = 3;
+  SHOWER = 4;
+  BATHTUB = 5;
+  HAIRDRYER = 6;
+  WASHER = 7;
+  DRYER = 8;
+  IRONING_EQUIPMENT = 9;
+  UNIVERSAL_POWER_ADAPTERS = 10;
+  AIR_CONDITIONING = 11;
+  HEATING = 12;
+  FIREPLACE = 13;
+  TV = 14;
+  TV_WITH_CASTING = 15;
+  TV_WITH_STREAMING = 16;
+  PAY_PER_VIEW_MOVIES = 17;
+  IN_UNIT_SAFE = 18;
+  ELECTRONIC_ROOM_KEY = 19;
+  IN_UNIT_WIFI_AVAILABLE = 20;
+  KITCHEN_AVAILABLE = 21;
+  REFRIGERATOR = 22;
+  DISHWASHER = 23;
+  STOVE = 24;
+  OVEN = 25;
+  COOKWARE = 26;
+  SINK = 27;
+  MICROWAVE = 28;
+  TOASTER = 29;
+  INDOOR_GRILL = 30;
+  OUTDOOR_GRILL = 31;
+  MINIBAR = 32;
+  SNACKBAR = 33;
+  COFFEE_MAKER = 34;
+  KETTLE = 35;
+  TEA_STATION = 36;
+  HYPOALLERGENIC_BEDDING = 37;
+  SYNTHETIC_PILLOWS = 38;
+  MEMORY_FOAM_PILLOWS = 39;
+  FEATHER_PILLOWS = 40;
+  STAIRS = 41;
+  LOFT = 42;
+  NON_SMOKING = 43;
+  PATIO = 44;
+  BALCONY = 45;
 }
 
 // List of available forms of guaranteeing a reservation.
