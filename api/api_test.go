@@ -6,9 +6,10 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
-	"reflect"
 	"testing"
 
+	"github.com/google/go-cmp/cmp"
+	"github.com/google/go-cmp/cmpopts/cmpopts"
 	"github.com/golang/protobuf/jsonpb"
 	"github.com/google/hotel-booking-api-validator/utils"
 )
@@ -200,34 +201,37 @@ func TestHTTPConnectionCert(t *testing.T) {
 		credentialsFile string
 		caFile          string
 		fullServerName  string
-		want            *http.Transport
+		want            *tls.Config
+		wantServerName  string
 	}{
 		{
 			serverAddr:      "test1:8080",
 			credentialsFile: "",
 			caFile:          "",
 			fullServerName:  "",
-			want:            &http.Transport{TLSClientConfig: nil},
+			wantServerName:  "http://test1:8080",
 		},
 		{
 			serverAddr:      "test2:8080",
 			credentialsFile: "",
 			caFile:          "/path/to/pem",
 			fullServerName:  "",
-			want: &http.Transport{TLSClientConfig: &tls.Config{
+			want: &tls.Config{
 				RootCAs:    fakeCertPool,
 				ServerName: "",
-			}},
+			},
+			wantServerName: "https://test2:8080",
 		},
 		{
 			serverAddr:      "test3.com:8080",
 			credentialsFile: "",
 			caFile:          "/path/to/pem",
 			fullServerName:  "test3.com",
-			want: &http.Transport{TLSClientConfig: &tls.Config{
+			want: &tls.Config{
 				RootCAs:    fakeCertPool,
 				ServerName: "test3.com",
-			}},
+			},
+			wantServerName: "https://test3.com:8080",
 		},
 	}
 	setupMockReader(t)
@@ -237,9 +241,12 @@ func TestHTTPConnectionCert(t *testing.T) {
 			t.Errorf("InitHTTPConnection() #%d returned error: %v", i, err)
 			continue
 		}
-		got := conn.client.Transport
-		if !reflect.DeepEqual(got, tc.want) {
-			t.Errorf("InitHTTPConnection(%s), got [%v] want [%v]", tc.serverAddr, got, tc.want)
+
+		if conn.baseURL != tc.wantServerName {
+			t.Errorf("InitHTTPConnection(%s), got [%v] want [%v]", tc.serverAddr, conn.baseURL, tc.wantServerName)
+		}
+		if tc.want != nil && !cmp.Equal(conn.config.RootCAs.Subjects(), tc.want.RootCAs.Subjects(), cmpopts.EquateEmpty()) {
+			t.Errorf("InitHTTPConnection(%s), got [%v] want [%v]", tc.serverAddr, conn.config.RootCAs, tc.want.RootCAs)
 		}
 	}
 }

@@ -166,6 +166,17 @@ message BookingSubmitRequest {
       // Card verification code. (required if cvc_required in the CardOption is
       // true)
       string cvc = 6;
+
+      // Cardholder authentication verification value. This token is populated
+      // if the transaction went through a 3-D Secure 2 authentication flow.
+      // (optional)
+      string cavv = 7;
+
+      // The ECI (Electronic Commerce Indicator) indicates the status of the
+      // card authentication. This is specific to the card type used in the
+      // transaction and populated if the transaction went through a 3-D Secure
+      // authentication flow. (optional)
+      string eci = 8;
     }
     // Detailed credit card information. (required if type is PAYMENT_CARD
     // unless tokenized payments are being used, in which case payment_token
@@ -828,51 +839,75 @@ enum CardType {
 // List of room amenity types
 enum RoomAmenityType {
   UNKNOWN_ROOM_AMENITY_TYPE = 0;
-  PRIVATE_BATHROOM = 1;
-  TOILET = 2;
-  BIDET = 3;
-  SHOWER = 4;
-  BATHTUB = 5;
-  HAIRDRYER = 6;
-  WASHER = 7;
-  DRYER = 8;
-  IRONING_EQUIPMENT = 9;
-  UNIVERSAL_POWER_ADAPTERS = 10;
-  AIR_CONDITIONING = 11;
-  HEATING = 12;
-  FIREPLACE = 13;
-  TV = 14;
-  TV_WITH_CASTING = 15;
-  TV_WITH_STREAMING = 16;
-  PAY_PER_VIEW_MOVIES = 17;
-  IN_UNIT_SAFE = 18;
-  ELECTRONIC_ROOM_KEY = 19;
-  IN_UNIT_WIFI_AVAILABLE = 20;
-  KITCHEN_AVAILABLE = 21;
-  REFRIGERATOR = 22;
-  DISHWASHER = 23;
-  STOVE = 24;
-  OVEN = 25;
-  COOKWARE = 26;
-  SINK = 27;
-  MICROWAVE = 28;
-  TOASTER = 29;
-  INDOOR_GRILL = 30;
-  OUTDOOR_GRILL = 31;
-  MINIBAR = 32;
-  SNACKBAR = 33;
-  COFFEE_MAKER = 34;
-  KETTLE = 35;
-  TEA_STATION = 36;
-  HYPOALLERGENIC_BEDDING = 37;
-  SYNTHETIC_PILLOWS = 38;
-  MEMORY_FOAM_PILLOWS = 39;
-  FEATHER_PILLOWS = 40;
-  STAIRS = 41;
-  LOFT = 42;
-  NON_SMOKING = 43;
-  PATIO = 44;
-  BALCONY = 45;
+  ALARM_CLOCK = 1;
+  CHARGING_BEDSIDE_TABLE = 2;
+  HYPOALLERGENIC_BEDDING = 3;
+  PILLOW = 4;
+  SYNTHETIC_PILLOW = 5;
+  MEMORY_FOAM_PILLOW = 6;
+  FEATHER_PILLOW = 7;
+  ROLL_AWAY_BED = 8;
+  CRIB = 9;
+  KITCHEN = 10;
+  REFRIGERATOR = 11;
+  DISHWASHER = 12;
+  STOVE = 13;
+  OVEN = 14;
+  COOKWARE = 15;
+  SINK = 16;
+  MICROWAVE = 17;
+  TOASTER = 18;
+  TOASTER_OVEN = 19;
+  INDOOR_GRILL = 20;
+  OUTDOOR_GRILL = 21;
+  DISHES_AND_UTENSILS = 22;
+  COOKING_UTENSILS = 23;
+  CONDIMENTS = 24;
+  PANTRY_STAPLES = 25;
+  MINIBAR = 26;
+  SNACKBAR = 27;
+  BOTTLE_WATER = 28;
+  BOTTLE_WATER_FREE = 29;
+  COFFEE_MAKER = 30;
+  KETTLE = 31;
+  TEA_STATION = 32;
+  PRIVATE_BATHROOM = 33;
+  TOILET = 34;
+  BIDET = 35;
+  SHOWER = 36;
+  SHOWER_ACCESSIBLE = 37;
+  BATHTUB = 38;
+  HAIRDRYER = 39;
+  BATHROBE = 40;
+  PRIVATE_INDOOR_HOT_TUB = 41;
+  PRIVATE_OUTDOOR_HOT_TUB = 42;
+  PRIVATE_POOL = 43;
+  PRIVATE_SAUNA = 44;
+  WASHER_DRYER = 45;
+  IRONING_EQUIPMENT = 46;
+  UNIVERSAL_POWER_ADAPTERS = 47;
+  AIR_CONDITIONING = 48;
+  HEATING = 49;
+  FIREPLACE = 50;
+  TV = 51;
+  TV_WITH_CASTING = 52;
+  TV_WITH_STREAMING = 53;
+  PAY_PER_VIEW_MOVIES = 54;
+  LARGE_SCREEN_TV = 55;
+  IN_ROOM_SAFE = 56;
+  ELECTRONIC_ROOM_KEY = 57;
+  SECOND_LOCK_ON_GUEST_DOORS = 58;
+  SMOKE_DETECTOR_IN_GUEST_ROOMS = 59;
+  FIRE_EXTINGUISHERS = 60;
+  EMERGENCY_EXIT_MAPS = 61;
+  STAIRS = 62;
+  LOFT = 63;
+  ACCESSIBLE_ROOM = 64;
+  ADA_COMPLIANT_ROOM = 65;
+  NON_SMOKING = 66;
+  WINDOWS_THAT_OPEN = 67;
+  PATIO = 68;
+  BALCONY = 69;
 }
 
 // List of available forms of guaranteeing a reservation.
