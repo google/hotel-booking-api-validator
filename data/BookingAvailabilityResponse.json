@@ -121,13 +121,13 @@
         "adults": 2
       },
       "total_price_at_checkout": {
-        "amount": 562,
+        "amount": 552,
         "currency": "USD"
       },
       "line_items": [
         {
           "price": {
-            "amount": 50,
+            "amount": 40,
             "currency": "USD"
           },
           "type": "UNKNOWN_TAXES_AND_FEES",

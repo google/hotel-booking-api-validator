@@ -45,6 +45,7 @@ var reader = ioutil.ReadFile
 // HTTPConnection is a convenience struct for holding connection-related objects.
 type HTTPConnection struct {
 	client      *http.Client
+	config      *tls.Config
 	credentials string
 	marshaler   *jsonpb.Marshaler
 	baseURL     string
@@ -70,6 +71,7 @@ func InitHTTPConnection(serverAddr, credentialsFile, caFile, fullServerName stri
 			Timeout:   TimeoutDuration,
 			Transport: &http.Transport{TLSClientConfig: config},
 		},
+		config:      config,
 		credentials: credentials,
 		marshaler:   &jsonpb.Marshaler{OrigName: true},
 		baseURL:     protocol + "://" + serverAddr,

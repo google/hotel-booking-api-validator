@@ -104,7 +104,7 @@ Usage of hotelBookingApiValidator:
   -full_server_name string
         Fully qualified domain name. Same name used to sign CN. Only necessary if ca_file is specified and the base URL differs from the server address.
   -ca_file string
-        Absolute path to your server's Certificate Authority root cert. Downloading all roots currently recommended by the Google Internet Authority is a suitable alternative https://pki.google.com/roots.pem. Leave blank to connect using http rather than https.
+        Absolute path to your server's Certificate Authority root cert. Downloading all roots currently recommended by the Google Internet Authority is a suitable alternative https://pki.goog/roots.pem. Leave blank to connect using http rather than https.
   -credentials_file string
         File containing credentials for your server. Leave blank to bypass authentication. File should have exactly one line of the form 'username:password'.
   -availability_endpoint string
