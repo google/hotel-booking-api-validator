@@ -4,7 +4,7 @@ syntax = "proto3";
 package ext.travel.booking.partner.v1;
 
 
-option go_package = ".;com_google_travel_booking_partners_googleapi_api";
+option go_package = "./;com_google_travel_booking_partners_googleapi_api";
 
 
 
@@ -86,13 +86,16 @@ message BookingAvailabilityResponse {
   // Echo number of adult guests and children by age in years. (required)
   Occupancy party = 6;
 
-  // The list of room types that match the search criteria. (required)
+  // The list of room types that match the search criteria. (required, unless
+  // there are no room rates available, then this can be an empty array)
   repeated RoomType room_types = 7;
 
-  // The list of rate plans that match the search criteria. (required)
+  // The list of rate plans that match the search criteria. (required, unless
+  // there are no room rates available, then this can be an empty array)
   repeated RatePlan rate_plans = 8;
 
-  // The list of room rates that match the search criteria; (required)
+  // The list of room rates that match the search criteria. (required, unless
+  // there are no room rates available, then this can be an empty array)
   repeated RoomRate room_rates = 9;
 
   // The hotel details. (required, unless error)
@@ -134,10 +137,12 @@ message BookingSubmitRequest {
   // (required)
   string language = 8;
 
-  // Customer details. (required)
+  // Customer details. The customer is the person placing the reservation.
+  // (required)
   Customer customer = 9;
 
-  // Primary traveler details along with party details. (required)
+  // Primary traveler details along with party details. The traveler is the
+  // person or group of people that will be staying at the hotel. (required)
   Traveler traveler = 10;
 
   // Room rate details. (required)
@@ -225,7 +230,9 @@ message BookingSubmitResponse {
     Locator locator = 1;
 
     // Locator in the hotel's reservation system, with either one element for
-    // the reservation or one element for each room. (optional)
+    // the reservation or one element for each room. This is only needed if the
+    // hotel uses a confirmation number that is different from the confirmation
+    // number in the partner's reservation system. (optional)
     repeated Locator hotel_locators = 2;
 
     // Partner hotel ID. (required)
@@ -256,6 +263,10 @@ message BookingSubmitResponse {
 // Other message specifications
 
 // Availability response error details.
+//
+// Note: If there are no room rates available, it is not considered to be an
+// error response. Instead, the response should contain an empty room_rates
+// array.
 message AvailabilityError {
   enum AvailabilityErrorType {
     // Error type is unknown.
@@ -322,7 +333,8 @@ message Address {
   string country = 7;
 }
 
-// Static list of typical room amenities.
+// Static list of typical room amenities. All fields are optional but
+// recommended if included in the reservation.
 message BasicAmenities {
   bool free_breakfast = 1;
   bool free_wifi = 2;
@@ -383,8 +395,9 @@ message CancellationPolicy {
   string cancellation_deadline = 2;
 
   // Display additional policy information associated with this cancellation
-  // policy. (required unless rules is fully specified in each RoomRate using
-  // this RatePlan)
+  // policy. This should describe the cancellation policy in effect for the
+  // reservation at the present time. (required unless rules is fully specified
+  // in each RoomRate using this RatePlan)
   DisplayString unstructured_policy = 3;
 }
 
@@ -454,17 +467,21 @@ message HotelDetails {
   // Hotel policy details.
   message HotelPolicies {
     // Check-in time in the hotel's local time zone including the time zone if
-    // possible (ISO 8601 format hh:mm or hh:mm+/-hh:mm). (optional)
+    // possible (ISO 8601 format hh:mm or hh:mm+/-hh:mm). (optional, but
+    // recommended if available)
     string check_in_time = 1;
 
     // Check-out time in the hotel's local time zone including the time zone if
-    // possible (ISO 8601 format hh:mm or hh:mm+/-hh:mm). (optional)
+    // possible (ISO 8601 format hh:mm or hh:mm+/-hh:mm). (optional, but
+    // recommended if available)
     string check_out_time = 2;
 
     // Maximum age for a guest to be considered a child. (optional)
     int32 max_child_age = 3;
 
     // Display additional policy information associated with this rate plan.
+    // These are policies that pertain to any reservations for the hotel, which
+    // are displayed to the user as conditions of booking.
     // (optional)
     repeated DisplayString unstructured_policies = 4;
   }
@@ -505,6 +522,8 @@ message PartnerPolicies {
   repeated CardOption card_options = 1;
 
   // Display additional policy information associated with this partner policy.
+  // These are policies that pertain to any reservations that are not imposed by
+  // the hotel, which are displayed to the user as conditions of booking.
   // (optional)
   repeated DisplayString unstructured_policies = 2;
 }
@@ -539,7 +558,8 @@ message RatePlan {
   // The description displayed for this rate plan. (optional)
   DisplayString description = 3;
 
-  // Indicates basic amenities available for this rate plan. (optional)
+  // Indicates basic amenities available for this rate plan. (optional, but
+  // recommended)
   BasicAmenities basic_amenities = 4;
 
   // Optional type of guarantee required to guarantee reservation. (required)
@@ -548,8 +568,9 @@ message RatePlan {
   // The designated cancellation policy for this rate plan.  (required)
   CancellationPolicy cancellation_policy = 6;
 
-  // Display additional policy information associated with this rate plan.
-  // (optional)
+  // Display additional policy information associated with this rate plan. These
+  // are policies that pertain to any reservations using this rate plan, which
+  // are displayed to the user as conditions of booking. (optional)
   repeated DisplayString unstructured_policies = 7;
 
   // Specifies conditions that must be satisfied to book a rate.
@@ -577,15 +598,17 @@ message RoomRate {
 
   // Maximum occupancy allowed for this room rate. If not specified, the room
   // rate must accommodate the party in the BookingAvailabilityRequest.
-  // (optional)
+  // (optional, but recommended if available)
   Capacity maximum_allowed_occupancy = 4;
 
-  // Total price at booking, should equal the sum of line_items for which
-  // paid_at_checkout is false. (required)
+  // Total price at booking (i.e., the prepayment amount), should equal the sum
+  // of line_items for which paid_at_checkout is false. (required if an amount
+  // is due at booking, i.e., prepayment)
   Price total_price_at_booking = 5;
 
-  // Total price at checkout, should equal the sum of line_items for which
-  // paid_at_checkout is true. (required)
+  // Total price at checkout (i.e., the amount due at the hotel), should equal
+  // the sum of line_items for which paid_at_checkout is true. (required if an
+  // amount is due at checkout, i.e., at the hotel)
   Price total_price_at_checkout = 6;
 
   message LineItem {
@@ -625,8 +648,10 @@ message RoomRate {
     // The type of this line item. (required)
     LineItemType type = 2;
 
-    // True if price is paid at checkout, false if the price is paid at booking.
-    // (required)
+    // True if the price is paid at checkout (i.e., when checking in the hotel
+    // at the start of the stay or out of the hotel after completion of the
+    // stay), false if the price is paid at booking (i.e., prepayment due when
+    // the booking is made). (required)
     bool paid_at_checkout = 3;
 
     // Line item descripion. (optional)
@@ -651,11 +676,14 @@ message RoomRate {
     Price penalty = 2;
   }
   // Preferred over CancellationPolicy/unstructured_policy when available. Will
-  // not be populated in BookingSubmitRequest. (optional)
+  // not be populated in BookingSubmitRequest. (optional, but recommended if
+  // available)
   repeated CancellationRule cancellation_rules = 8;
 
-  // Display additional policy information associated with this room rate. Will
-  // not be populated in BookingSubmitRequest. (optional)
+  // Display additional policy information associated with this room rate. These
+  // are policies that pertain to reservations for this room rate, which are
+  // displayed to the user as conditions of booking.  Will not be populated in
+  // BookingSubmitRequest. (optional)
   DisplayString unstructured_policy = 9;
 
   // Arbitrary data to be echoed back in the booking submission. (optional)
@@ -679,12 +707,12 @@ message RoomType {
   // The description displayed for this room type. (optional)
   DisplayString description = 3;
 
-  // Basic amenities for the associated room type. (optional)
+  // Basic amenities for the associated room type. (optional, but recommended)
   BasicAmenities basic_amenities = 4;
 
   // List of amenities available in the room. If an amenity is not specified in
-  // the array, we assume it's unknown. (optional)
-  repeated RoomAmenityType room_amenities = 9;
+  // the array, we assume it's unknown. (optional, but recommended if available)
+  repeated RoomAmenityType amenities = 9;
 
   // Room size in square meters. (optional)
   float room_area_sq_meters = 10;
@@ -692,12 +720,12 @@ message RoomType {
   // Room size in square feet. (optional)
   float room_area_sq_feet = 11;
 
-  // Room photos. (optional)
+  // Room photos. (optional, but recommended)
   repeated Photo photos = 5;
 
   // Maximum occupants that the room is capable of accommodating. If not
   // specified, the room type must accommodate the party in the
-  // BookingAvailabilityRequest. (optional)
+  // BookingAvailabilityRequest. (optional, but recommended if available)
   Capacity capacity = 6;
 
   message BedTypes {
@@ -711,11 +739,13 @@ message RoomType {
     int32 bunk_beds = 8;
     int32 other_beds = 9;
   }
-  // Count of each bed type available in the room. (optional)
+  // Count of each bed type available in the room. (optional, but recommended if
+  // available)
   BedTypes bed_types = 7;
 
-  // Display additional policy information associated with this room type.
-  // (required unless rules is fully specified)
+  // Display additional policy information associated with this room type. These
+  // are policies that pertain to any reservations for this room type, which are
+  // displayed to the user as conditions of booking. (optional)
   repeated DisplayString unstructured_policies = 8;
 }
 
@@ -808,7 +838,9 @@ message Tracking {
   string campaign_id = 1;
 
   // Point of Sale (POS) URL, a deep link to the partner's website that may
-  // contain tracking parameters. (optional)
+  // contain tracking parameters. Note that this should not be relied on for
+  // information present elsewhere in the request, such as dates of stay or
+  // party size. (optional)
   string pos_url = 2;
 }
 
@@ -916,6 +948,8 @@ enum GuaranteeType {
   UNKNOWN_GUARANTEE_TYPE = 0;
   // The user provides a credit or debit card when booking the reservation.
   PAYMENT_CARD = 1;
-  // Payment information is not required at the time of booking.
+  // Payment information is not required at the time of booking. This should
+  // only be used for "paymentless" rates where a guarantee is not needed and
+  // payment is collected at the hotel.
   NO_GUARANTEE = 2;
 }
